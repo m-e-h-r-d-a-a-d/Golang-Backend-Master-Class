@@ -1,3 +1,3 @@
-module github.com/techschool/simplebank
+module simplebank
 
 go 1.21.4
