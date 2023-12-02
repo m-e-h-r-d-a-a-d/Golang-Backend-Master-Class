@@ -16,7 +16,10 @@ import (
 // 	dbSource = "postgresql://root:123@localhost:5433/simple_bank?sslmode=disable"
 // )
 
-var testQueries *Queries
+var (
+	testQueries *Queries
+	connPool    *pgxpool.Pool
+)
 
 func TestMain(m *testing.M) {
 	config, err := util.LoadConfig("../..")
@@ -24,7 +27,7 @@ func TestMain(m *testing.M) {
 		log.Fatal("cannot load config:", err)
 	}
 
-	connPool, err := pgxpool.New(context.Background(), config.DBSource)
+	connPool, err = pgxpool.New(context.Background(), config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
