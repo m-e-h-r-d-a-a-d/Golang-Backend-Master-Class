@@ -1,5 +1,8 @@
 postgress:
-	docker run --name postgres16 --restart always -p 5433:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123 -d postgres:16-alpine
+	docker run --name postgres16  --network bank-network --restart always -p 5433:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123 -d postgres:16-alpine
+
+mysql:
+	docker run --name mysql8 -p 3306:3306  -e MYSQL_ROOT_PASSWORD=123 -d mysql:8
 
 createdb:
 	docker exec -it postgres16 createdb --username=root --owner=root simple_bank
