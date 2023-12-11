@@ -8,7 +8,6 @@ package pb
 
 import (
 	context "context"
-	pb "github.com/techschool/simplebank/pb"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -23,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SimpleBankClient interface {
-	CreateUser(ctx context.Context, in *pb.CreateUserRequest, opts ...grpc.CallOption) (*pb.CreateUserResponse, error)
+	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 }
 
 type simpleBankClient struct {
@@ -34,8 +33,8 @@ func NewSimpleBankClient(cc grpc.ClientConnInterface) SimpleBankClient {
 	return &simpleBankClient{cc}
 }
 
-func (c *simpleBankClient) CreateUser(ctx context.Context, in *pb.CreateUserRequest, opts ...grpc.CallOption) (*pb.CreateUserResponse, error) {
-	out := new(pb.CreateUserResponse)
+func (c *simpleBankClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+	out := new(CreateUserResponse)
 	err := c.cc.Invoke(ctx, "/pb.SimpleBank/CreateUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -47,7 +46,7 @@ func (c *simpleBankClient) CreateUser(ctx context.Context, in *pb.CreateUserRequ
 // All implementations must embed UnimplementedSimpleBankServer
 // for forward compatibility
 type SimpleBankServer interface {
-	CreateUser(context.Context, *pb.CreateUserRequest) (*pb.CreateUserResponse, error)
+	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	mustEmbedUnimplementedSimpleBankServer()
 }
 
@@ -55,7 +54,7 @@ type SimpleBankServer interface {
 type UnimplementedSimpleBankServer struct {
 }
 
-func (UnimplementedSimpleBankServer) CreateUser(context.Context, *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (UnimplementedSimpleBankServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
 func (UnimplementedSimpleBankServer) mustEmbedUnimplementedSimpleBankServer() {}
@@ -72,7 +71,7 @@ func RegisterSimpleBankServer(s grpc.ServiceRegistrar, srv SimpleBankServer) {
 }
 
 func _SimpleBank_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(pb.CreateUserRequest)
+	in := new(CreateUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -84,7 +83,7 @@ func _SimpleBank_CreateUser_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/pb.SimpleBank/CreateUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SimpleBankServer).CreateUser(ctx, req.(*pb.CreateUserRequest))
+		return srv.(SimpleBankServer).CreateUser(ctx, req.(*CreateUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
