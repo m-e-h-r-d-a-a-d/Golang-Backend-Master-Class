@@ -13,8 +13,8 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
-      - "9090:9090"
+      - "8081:8081"
+      - "9091:9091"
     environment:
       - DB_SOURCE=postgresql://root:123@postgres:5433/simple_bank?sslmode=disable
     depends_on:
