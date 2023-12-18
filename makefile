@@ -7,7 +7,7 @@ postgress:
 	docker run --name postgres16  --network bank-network --restart always -p 5433:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123 -d postgres:16-alpine
 
 mysql:
-	docker run --name mysql8 -p 3306:3306  -e MYSQL_ROOT_PASSWORD=123 -d mysql:8
+	docker run --name mysql8 --restart always -p 3306:3306  -e MYSQL_ROOT_PASSWORD=123 -d mysql:8
 
 createdb:
 	docker exec -it postgres16 createdb --username=root --owner=root simple_bank
@@ -26,6 +26,9 @@ migratedown:
 
 migratedown1:
 	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
+
+new_migration:
+	migrate create -ext sql -dir db/migration -seq $(name)
 
 db_docs:
 	dbdocs build doc/db.dbml
@@ -60,6 +63,6 @@ evans:
 	evans --host localhost --port 9090 -r repl
 
 redis:
-	docker run --name redis -p 6380:6379 -d redis:7-alpine
+	docker run --name redis --restart always -p 6380:6379 -d redis:7-alpine
 
-.PHONY: network postgres mysql createdb dropdb migrateup migrateup1 migratedown migratedown1 db_docs db_schema sqlc test server mock proto evans redis
+.PHONY: network postgres mysql createdb dropdb migrateup migrateup1 migratedown migratedown1 new_migration db_docs db_schema sqlc test server mock proto evans redis
