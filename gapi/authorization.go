@@ -43,6 +43,10 @@ func (server *Server) authorizeUser(ctx context.Context, accessibleRoles []strin
 		return nil, fmt.Errorf("invalid access token: %s", err)
 	}
 
+	if !hasPermission(payload.Role, accessibleRoles) {
+		return nil, fmt.Errorf("permission denied")
+	}
+
 	return payload, nil
 }
 
